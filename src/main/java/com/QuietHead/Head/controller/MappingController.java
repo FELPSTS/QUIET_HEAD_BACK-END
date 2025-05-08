@@ -1,5 +1,6 @@
 package com.QuietHead.Head.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.QuietHead.Head.service.ServiceQuiet;
@@ -7,6 +8,7 @@ import com.QuietHead.Head.service.ServiceQuiet;
 @RestController
 public class MappingController {
 
+    @Autowired
     private final ServiceQuiet helloWorldService;
 
     public MappingController(ServiceQuiet helloWorldService){
