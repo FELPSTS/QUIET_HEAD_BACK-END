@@ -35,7 +35,7 @@ public class MappingController {
         return helloWorldService.helloWorld(" QUIET");
     }
 
-    @PostMapping("/Cliente")
+    @PostMapping("/CreateCliente")
     public Cliente criarCliente(@RequestBody Cliente cliente) {
         return clienteRepository.save(cliente);
     }
