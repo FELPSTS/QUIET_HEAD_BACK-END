@@ -1,9 +1,7 @@
 package com.QuietHead.Head.controller;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.QuietHead.Head.domain.Cliente;
 import com.QuietHead.Head.repository.ClienteRepository;
 import com.QuietHead.Head.service.ServiceQuiet;
@@ -37,8 +35,10 @@ public class MappingController {
         return helloWorldService.helloWorld(" QUIET");
     }
 
-    @PostMapping("/criar")
+    @PostMapping("/Cliente")
     public Cliente criarCliente(@RequestBody Cliente cliente) {
         return clienteRepository.save(cliente);
     }
+
+
 }
