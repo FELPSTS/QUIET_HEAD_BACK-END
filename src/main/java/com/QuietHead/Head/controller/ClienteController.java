@@ -1,62 +1,7 @@
-<<<<<<< HEAD
 package com.QuietHead.Head.controller;
-
 import com.QuietHead.Head.domain.Cliente;
 import com.QuietHead.Head.service.ClienteService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-
-@RestController
-@RequestMapping("/clientes")
-public class ClienteController {
-
-    private final ClienteService clienteService;
-
-        @Autowired
-    public ClienteController(ClienteService clienteService) {
-        this.clienteService = clienteService;
-    }
-
-        @PostMapping
-    public Cliente criarCliente(@RequestBody Cliente cliente) {
-        return clienteService.salvarCliente(cliente);
-    }
-
-        @GetMapping
-    public List<Cliente> listarClientes() {
-        return clienteService.listarClientes();
-    }
-
-        @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
-        Cliente cliente = clienteService.buscarPorId(id);
-        if (cliente != null) {
-            return ResponseEntity.ok(cliente);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-    
-        @PutMapping("/{id}")
-    public ResponseEntity<Cliente> atualizarCliente(@PathVariable Long id, @RequestBody Cliente clienteAtualizado) {
-        Cliente cliente = clienteService.alterarPorId(id, clienteAtualizado);
-        if (cliente != null) {
-            return ResponseEntity.ok(cliente);
-        }   
-        else {
-            return ResponseEntity.notFound().build();
-            }
-        }
-    }
-=======
-package com.QuietHead.Head.controller;
-
-import com.QuietHead.Head.domain.Cliente;
-import com.QuietHead.Head.service.ClienteService;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -75,23 +20,44 @@ public class ClienteController {
     }
 
     @PostMapping
-    public Cliente criarCliente(@RequestBody Cliente cliente) {
-        return clienteService.salvarCliente(cliente);
+    public ResponseEntity<Cliente> criarCliente(@RequestBody Cliente cliente) {
+        Cliente criado = clienteService.salvarCliente(cliente);
+        return ResponseEntity.ok(criado);
     }
 
     @GetMapping
-    public List<Cliente> listarClientes() {
-        return clienteService.listarClientes();
+    public ResponseEntity<List<Cliente>> listarClientes() {
+        List<Cliente> clientes = clienteService.listarClientes();
+        return ResponseEntity.ok(clientes);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Long id) {
-        Cliente cliente = clienteService.buscarPorId(id);
+    @GetMapping("/{email}")
+    public ResponseEntity<Cliente> buscarClientePorEmail(@PathVariable String email) {
+        Cliente cliente = clienteService.buscarPorEmail(email);
         if (cliente != null) {
             return ResponseEntity.ok(cliente);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("/atualizar/{email}")
+    public ResponseEntity<Cliente> atualizarClientePorEmail(@PathVariable String email, @RequestBody Cliente clienteAtualizado) {
+        Cliente clienteAtualizadoBanco = clienteService.alterarPorEmail(email, clienteAtualizado);
+        if (clienteAtualizadoBanco != null) {
+            return ResponseEntity.ok(clienteAtualizadoBanco);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+        @DeleteMapping("/delete/{email}")
+        public ResponseEntity<Void> deletarClientePorEmail(@PathVariable String email) {
+        boolean deletado = clienteService.deletarPorEmail(email);
+        if (deletado) {
+            return ResponseEntity.noContent().build(); // 204 No Content
+        } else {
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        }
+    }
+    
 }
->>>>>>> 21bb8000780e385f4329322ec3a46b35e2631191
