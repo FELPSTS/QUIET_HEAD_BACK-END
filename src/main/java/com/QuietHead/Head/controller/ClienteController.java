@@ -54,9 +54,9 @@ public class ClienteController {
         public ResponseEntity<Void> deletarClientePorEmail(@PathVariable String email) {
         boolean deletado = clienteService.deletarPorEmail(email);
         if (deletado) {
-            return ResponseEntity.noContent().build(); // 204 No Content
+            return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build(); // 404 Not Found
+            return ResponseEntity.notFound().build(); 
         }
     }
     
