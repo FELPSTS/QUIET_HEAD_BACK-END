@@ -3,11 +3,16 @@ package com.QuietHead.Head.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.QuietHead.Head.domain.Cliente;
 import com.QuietHead.Head.domain.Event;
 import com.QuietHead.Head.repository.EventRepository;
 import jakarta.annotation.PostConstruct;
 
 import java.util.List;
+import java.util.Optional;
+
+
+
 
 @Service
 public class EventService {
@@ -25,6 +30,23 @@ public class EventService {
         return eventRepository.save(event);
     }
 
+    public List<Event> listarEvents() {
+        return eventRepository.findAll();
+    }
+
+    public Event buscarPorId(Long id) {
+        return eventRepository.findById(id).orElse(null);
+    }
+
+    public boolean deletarPorId(Long id) {
+        Optional<Event> eventExistente = eventRepository.findById(id);
+        if (eventExistente.isPresent()) {
+            eventRepository.delete(eventExistente.get());
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     @PostConstruct
     public void testarConexaoNeo4j() {
