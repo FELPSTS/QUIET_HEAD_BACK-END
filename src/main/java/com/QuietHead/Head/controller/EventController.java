@@ -1,9 +1,7 @@
 package com.QuietHead.Head.controller;
-import com.QuietHead.Head.domain.Cliente;
+
 import com.QuietHead.Head.domain.Event;
-import com.QuietHead.Head.service.ClienteService;
 import com.QuietHead.Head.service.EventService;
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,23 +21,33 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<Event> criarEvent(@RequestBody Event event) {
-        Event criado = eventService.salvarEvent(event);
-        return ResponseEntity.ok(criado);
+    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
+        Event saved = eventService.saveEvent(event);
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping
-    public ResponseEntity<List<Event>> listarEvents() {
-        List<Event> events = eventService.listarEvents();
+    public ResponseEntity<List<Event>> listEvents() {
+        List<Event> events = eventService.listEvents();
         return ResponseEntity.ok(events);
     }
 
+    @PutMapping("/update/{email}")
+    public ResponseEntity<Event> updateEventById(@PathVariable Long id, @RequestBody Event eventUpdate) {
+        Event eventUpdateBanco = eventService.updateEventById(id, eventUpdate);
+        if (eventUpdateBanco != null) {
+            return ResponseEntity.ok(eventUpdateBanco);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("/delete/{id}")
-        public ResponseEntity<Void> deletarEventPorId(@PathVariable String id) {
+        public ResponseEntity<Void> deleteEventById(@PathVariable String id) {
         try {
             long eventId = Long.parseLong(id);
-            boolean deletado = eventService.deletarPorId(eventId);
-            if (deletado) {
+            boolean deleted = eventService.deleteEventById(eventId);
+            if (deleted) {
                 return ResponseEntity.noContent().build();
             } else {
                 return ResponseEntity.notFound().build(); 

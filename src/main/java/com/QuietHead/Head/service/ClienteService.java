@@ -21,7 +21,7 @@ public class ClienteService {
         this.serviceQuiet = serviceQuiet;
     }
 
-    public Cliente salvarCliente(Cliente cliente) {
+    public Cliente saveCliente(Cliente cliente) {
         String saudacao = serviceQuiet.helloWorld(cliente.getNome());
         System.out.println(saudacao);
 
@@ -36,38 +36,26 @@ public class ClienteService {
         return clienteRepository.findById(id).orElse(null);
     }
 
-    public Cliente buscarPorEmail(String email) {
+    public Cliente seachByEmail(String email) {
         return clienteRepository.findByEmail(email).orElse(null);
     }
 
-    public Cliente alterarPorId(Long id, Cliente clienteAtualizado) {
-        Optional<Cliente> clienteExistente = clienteRepository.findById(id);
-        if (clienteExistente.isPresent()) {
-            Cliente cliente = clienteExistente.get();
-            cliente.setNome(clienteAtualizado.getNome());
-            cliente.setEmail(clienteAtualizado.getEmail());
+    public Cliente updateByEmail(String email, Cliente clienteUpdate) {
+        Optional<Cliente> clienteExisting = clienteRepository.findByEmail(email);
+        if (clienteExisting .isPresent()) {
+            Cliente cliente = clienteExisting.get();
+            cliente.setNome(clienteUpdate.getNome());
+
             return clienteRepository.save(cliente);
         } else {
             return null;
         }
     }
 
-    public Cliente alterarPorEmail(String email, Cliente clienteAtualizado) {
-        Optional<Cliente> clienteExistente = clienteRepository.findByEmail(email);
-        if (clienteExistente.isPresent()) {
-            Cliente cliente = clienteExistente.get();
-            cliente.setNome(clienteAtualizado.getNome());
-            cliente.setEmail(clienteAtualizado.getEmail());
-            return clienteRepository.save(cliente);
-        } else {
-            return null;
-        }
-    }
-
-    public boolean deletarPorEmail(String email) {
-        Optional<Cliente> clienteExistente = clienteRepository.findByEmail(email);
-        if (clienteExistente.isPresent()) {
-            clienteRepository.delete(clienteExistente.get());
+    public boolean deletePorEmail(String email) {
+        Optional<Cliente> clienteExisting = clienteRepository.findByEmail(email);
+        if (clienteExisting.isPresent()) {
+            clienteRepository.delete(clienteExisting.get());
             return true;
         } else {
             return false;
