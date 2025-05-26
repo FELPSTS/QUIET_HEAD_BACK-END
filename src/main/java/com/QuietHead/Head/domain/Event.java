@@ -23,7 +23,12 @@ public class Event {
 
     public String local;
     public LocalDate  data;
-    public String participante;
+    public String participant;
     public Long carid;
 
+    @Relationship(type = "CREATE BY", direction = Relationship.Direction.OUTGOING)
+    private Administrador administrador;
+
+    @Relationship(type = "PARTICIPANT", direction = Relationship.Direction.INCOMING)
+    private List<Cliente> participantes;
 }
