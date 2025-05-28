@@ -25,12 +25,11 @@ public class Event {
     public LocalDate  data;
 
     @Relationship(type = "CREATE BY", direction = Relationship.Direction.OUTGOING)
-    private Administrador administrador;
+    private List<administrador> administrador;
 
     @Relationship(type = "PARTICIPANT", direction = Relationship.Direction.INCOMING)
     private List<Cliente> participantes;
 
     @Relationship(type = "DISPLAY", direction = Relationship.Direction.OUTGOING)
-    private Carro carro;
-}
+    private List<car> car;
 }
