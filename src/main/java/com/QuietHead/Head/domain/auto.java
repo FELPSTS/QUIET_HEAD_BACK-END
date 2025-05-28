@@ -14,11 +14,21 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Node
 public class auto {
-    id dono;
-    long id_dono;
-    String categoria;
-    String color;
-    Text Model;
-    YearDate year;
+
+    @id
+    @GeneratedValue
+        private Long id
+        private long nameowner;
+        public long id_owner;
+        public String category;
+        public String color;
+        public Text Model;
+        public YearDate year;
+
+    @Relationship(type = "OWNER", direction = Relationship.Direction.INCOMING)
+    private List<Cliente> owner;
 }
