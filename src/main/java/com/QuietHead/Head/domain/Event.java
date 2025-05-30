@@ -1,5 +1,10 @@
 package com.QuietHead.Head.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -7,11 +12,6 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Setter
@@ -27,9 +27,10 @@ public class Event {
     private String local;
     private LocalDate data;
 
-    //@Relationship(type = "CREATED_BY", direction = Relationship.Direction.OUTGOING)
-    //private Administrador administrador;
+    @Relationship(type = "CREATED_BY", direction = Relationship.Direction.OUTGOING)
+    private List<Administrator> administrador;
 
     @Relationship(type = "PARTICIPANT", direction = Relationship.Direction.INCOMING)
-    private List<Cliente> participant;
+    private List<Cliente> participantes;
+
 }
