@@ -1,16 +1,15 @@
 package com.QuietHead.Head.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
-import java.time.Year;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
 
 @Getter
@@ -18,16 +17,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Node
-public class auto {
+public class Auto {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    private String category;
-    private String color;
-    private String model;
-    private Year year;
+    private String modelo;
+    private String categoria;
+    private String cor;
+    private int ano;
+
+    private Long idOwner;
 
     @Relationship(type = "OWNER", direction = Relationship.Direction.INCOMING)
     private List<Cliente> owner;

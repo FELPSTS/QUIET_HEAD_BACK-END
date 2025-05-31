@@ -1,6 +1,0 @@
-/mvnw text eol=lf
-*.cmd text eol=crlf
-<<<<<<< HEAD
-=======
-*.jar filter=lfs diff=lfs merge=lfs -text
->>>>>>> 7f9d5ea (feat: add root route with API welcome message)
