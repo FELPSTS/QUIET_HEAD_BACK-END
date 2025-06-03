@@ -12,6 +12,7 @@ import java.util.List;
 @RequestMapping("/autos")
 public class AutoController {
 
+    @Autowired
     private final AutoService autoService;
 
     @Autowired
@@ -59,5 +60,15 @@ public class AutoController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // Relationship method
+    @PutMapping("/{autoId}/owner/{ClientId}")
+    public ResponseEntity<Auto> linkOwner(@PathVariable Long autoId, @PathVariable Long ClientId) {
+        Auto updatedAuto = autoService.linkOwner(autoId, ClientId);
+        if (updatedAuto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedAuto);
     }
 }

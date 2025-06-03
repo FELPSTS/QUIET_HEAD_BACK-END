@@ -28,8 +28,6 @@ public class Auto {
     private String cor;
     private int ano;
 
-    private Long idOwner;
-
     @Relationship(type = "OWNER", direction = Relationship.Direction.INCOMING)
-    private List<Cliente> owner;
+    private List<Client> owner;
 }

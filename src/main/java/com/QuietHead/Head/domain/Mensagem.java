@@ -30,7 +30,7 @@ public class Mensagem {
     private boolean lida;
 
     @Relationship(type = "ENVIADA_POR", direction = Relationship.Direction.OUTGOING)
-    private List<Cliente> remetente;
+    private List<Client> remetente;
 
     @Relationship(type = "RECEBIDA_POR", direction = Relationship.Direction.OUTGOING)
     private List<Administrator> destinatario;

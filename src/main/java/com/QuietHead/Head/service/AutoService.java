@@ -1,7 +1,10 @@
 package com.QuietHead.Head.service;
 
 import com.QuietHead.Head.domain.Auto;
+import com.QuietHead.Head.domain.Client;
 import com.QuietHead.Head.repository.AutoRepository;
+import com.QuietHead.Head.repository.ClientRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +14,16 @@ import java.util.List;
 public class AutoService {
 
     private final AutoRepository autoRepository;
+    private final ClientRepository ClientRepository;
 
     @Autowired
-    public AutoService(AutoRepository autoRepository) {
+    public AutoService(AutoRepository autoRepository, ClientRepository ClientRepository) {
         this.autoRepository = autoRepository;
+        this.ClientRepository = ClientRepository;  
     }
+
+
+
 
     public Auto save(Auto auto) {
         return autoRepository.save(auto);
@@ -44,5 +52,17 @@ public class AutoService {
             return true;
         }
         return false;
+    }
+        // Relationship method
+    public Auto linkOwner(Long autoId, Long ClientId) {
+        Auto auto = autoRepository.findById(autoId).orElse(null);
+        Client Client = ClientRepository.findById(ClientId).orElse(null);
+
+        if (auto == null || Client == null) {
+            return null; 
+        }
+
+        auto.setOwner(List.of(Client));
+        return autoRepository.save(auto);
     }
 }

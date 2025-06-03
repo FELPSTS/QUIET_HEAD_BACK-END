@@ -60,7 +60,7 @@ public class AdministratorService {
     public void testarConexaoNeo4j() {
         try {
             List<Administrator> administrators = administratorRepository.findAll();
-            System.out.println("✅ Conexão com o Neo4j funcionando. Total de clientes: " + administrators.size());
+            System.out.println("✅ Conexão com o Neo4j funcionando. Total de Clients: " + administrators.size());
         } catch (Exception e) {
             System.err.println("❌ Erro ao conectar com o Neo4j: " + e.getMessage());
         }

@@ -31,6 +31,6 @@ public class Event {
     private List<Administrator> administrador;
 
     @Relationship(type = "PARTICIPANT", direction = Relationship.Direction.INCOMING)
-    private List<Cliente> participantes;
+    private List<Client> participantes;
 
 }
