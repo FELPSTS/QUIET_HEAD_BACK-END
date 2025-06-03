@@ -30,4 +30,7 @@ public class Auto {
 
     @Relationship(type = "OWNER", direction = Relationship.Direction.INCOMING)
     private List<Client> owner;
+
+    @Relationship(type = "PARTICIPANT", direction = Relationship.Direction.INCOMING)
+    private List<Auto> PARTICIPANT;
 }

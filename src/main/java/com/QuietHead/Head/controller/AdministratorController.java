@@ -28,7 +28,7 @@ public class AdministratorController {
 
     @GetMapping
     public ResponseEntity<List<Administrator>> listAdministrator() {
-        List<Administrator> administrators = administratorService.listarAdministrator();
+        List<Administrator> administrators = administratorService.listAdministrator();
         return ResponseEntity.ok(administrators);
     }
 
@@ -53,7 +53,7 @@ public class AdministratorController {
     }
         @DeleteMapping("/delete/{email}")
         public ResponseEntity<Void> deleteADMByEmail(@PathVariable String email) {
-        boolean deleted = administratorService.deletePorEmail(email);
+        boolean deleted = administratorService.deleteByEmail(email);
         if (deleted) {
             return ResponseEntity.noContent().build();
         } else {

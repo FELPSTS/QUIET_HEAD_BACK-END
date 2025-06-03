@@ -52,14 +52,4 @@ public class EventService {
             return false;
         }
     }
-
-    @PostConstruct
-    public void testarConexaoNeo4j() {
-        try {
-            List<Event> events = eventRepository.findAll();
-            System.out.println("✅ Conexão com o Neo4j funcionando. Total de Eventos: " + events.size());
-        } catch (Exception e) {
-            System.err.println("❌ Erro ao conectar com o Neo4j: " + e.getMessage());
-        }
-    }
 }

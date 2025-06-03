@@ -19,19 +19,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Node
-public class Mensagem {
+public class Message {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    private String texto;
-    private LocalDateTime dataHora;
+    private String text;
+
+    private LocalDateTime dataHora = LocalDateTime.now();
     private boolean lida;
 
-    @Relationship(type = "ENVIADA_POR", direction = Relationship.Direction.OUTGOING)
-    private List<Client> remetente;
+     @Relationship(type = "SENT_BY", direction = Relationship.Direction.OUTGOING)
+    private Client sender;
 
-    @Relationship(type = "RECEBIDA_POR", direction = Relationship.Direction.OUTGOING)
-    private List<Administrator> destinatario;
+     @Relationship(type = "RECEIVED_BY", direction = Relationship.Direction.OUTGOING)
+    private Client receiver;  
+
 }

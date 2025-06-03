@@ -1718,9 +1718,9 @@ org.apache.hc.core5.http.ConnectionRequestTimeoutException: Timeout deadline: 18
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
 
 !ENTRY org.eclipse.ui 4 4 2025-05-04 20:46:44.719
-!MESSAGE Conflicting handlers for org.eclipse.ui.edit.cut: {ActionHandler(org.eclipse.ui.texteditor.TextNavigationAction@4913465d)} vs {ActionHandler(org.eclipse.ui.texteditor.TextOperationAction@5e324000)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext
+!MESSAGE Conflicting handlers for org.eclipse.ui.edit.cut: {ActionHandler(org.eclipse.ui.texteditor.TextNavigationAction@4913465d)} vs {ActionHandler(org.eclipse.ui.texteditor.textperationAction@5e324000)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext
 !STACK 0
-java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.ui.texteditor.TextNavigationAction@4913465d),  for 'org.eclipse.ui.edit.cut',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext, activeWhen=ActivePartExpression(org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor@57f2a68c), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.ui.texteditor.TextOperationAction@5e324000),  for 'org.eclipse.ui.edit.cut',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext, activeWhen=ActivePartExpression(org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor@57f2a68c), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext
+java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.ui.texteditor.TextNavigationAction@4913465d),  for 'org.eclipse.ui.edit.cut',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext, activeWhen=ActivePartExpression(org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor@57f2a68c), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.ui.texteditor.textperationAction@5e324000),  for 'org.eclipse.ui.edit.cut',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext, activeWhen=ActivePartExpression(org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor@57f2a68c), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext
 	at org.eclipse.ui.internal.handlers.LegacyHandlerService$HandlerSelectionFunction.compute(LegacyHandlerService.java:143)
 	at org.eclipse.e4.core.internal.contexts.ValueComputation.get(ValueComputation.java:70)
 	at org.eclipse.e4.core.internal.contexts.EclipseContext.internalGet(EclipseContext.java:243)
@@ -1759,7 +1759,7 @@ java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclip
 	at org.eclipse.e4.core.internal.di.InjectorImpl.processAnnotated(InjectorImpl.java:938)
 	at org.eclipse.e4.core.internal.di.InjectorImpl.uninject(InjectorImpl.java:181)
 	at org.eclipse.e4.core.internal.di.Requestor.uninject(Requestor.java:177)
-	at org.eclipse.e4.core.internal.contexts.ContextObjectSupplier$ContextInjectionListener.update(ContextObjectSupplier.java:89)
+	at org.eclipse.e4.core.internal.contexts.ContextbjectSupplier$ContextInjectionListener.update(ContextbjectSupplier.java:89)
 	at org.eclipse.e4.core.internal.contexts.TrackableComputationExt.update(TrackableComputationExt.java:103)
 	at org.eclipse.e4.core.internal.contexts.EclipseContext.removeListenersTo(EclipseContext.java:487)
 	at org.eclipse.e4.core.contexts.ContextInjectionFactory.uninject(ContextInjectionFactory.java:185)
@@ -1880,9 +1880,9 @@ java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclip
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1459)
 
 !ENTRY org.eclipse.ui 4 4 2025-05-04 20:46:44.721
-!MESSAGE Conflicting handlers for org.eclipse.ui.edit.copy: {ActionHandler(org.eclipse.ui.texteditor.TextNavigationAction@4aebd384)} vs {ActionHandler(org.eclipse.ui.texteditor.TextOperationAction@7b51fc45)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext
+!MESSAGE Conflicting handlers for org.eclipse.ui.edit.copy: {ActionHandler(org.eclipse.ui.texteditor.TextNavigationAction@4aebd384)} vs {ActionHandler(org.eclipse.ui.texteditor.textperationAction@7b51fc45)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext
 !STACK 0
-java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.ui.texteditor.TextNavigationAction@4aebd384),  for 'org.eclipse.ui.edit.copy',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext, activeWhen=ActivePartExpression(org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor@57f2a68c), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.ui.texteditor.TextOperationAction@7b51fc45),  for 'org.eclipse.ui.edit.copy',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext, activeWhen=ActivePartExpression(org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor@57f2a68c), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext
+java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.ui.texteditor.TextNavigationAction@4aebd384),  for 'org.eclipse.ui.edit.copy',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext, activeWhen=ActivePartExpression(org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor@57f2a68c), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.ui.texteditor.textperationAction@7b51fc45),  for 'org.eclipse.ui.edit.copy',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext, activeWhen=ActivePartExpression(org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor@57f2a68c), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.mylyn.wikitext.ui.editor.markupEditorContext
 	at org.eclipse.ui.internal.handlers.LegacyHandlerService$HandlerSelectionFunction.compute(LegacyHandlerService.java:143)
 	at org.eclipse.e4.core.internal.contexts.ValueComputation.get(ValueComputation.java:70)
 	at org.eclipse.e4.core.internal.contexts.EclipseContext.internalGet(EclipseContext.java:243)
@@ -1921,7 +1921,7 @@ java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclip
 	at org.eclipse.e4.core.internal.di.InjectorImpl.processAnnotated(InjectorImpl.java:938)
 	at org.eclipse.e4.core.internal.di.InjectorImpl.uninject(InjectorImpl.java:181)
 	at org.eclipse.e4.core.internal.di.Requestor.uninject(Requestor.java:177)
-	at org.eclipse.e4.core.internal.contexts.ContextObjectSupplier$ContextInjectionListener.update(ContextObjectSupplier.java:89)
+	at org.eclipse.e4.core.internal.contexts.ContextbjectSupplier$ContextInjectionListener.update(ContextbjectSupplier.java:89)
 	at org.eclipse.e4.core.internal.contexts.TrackableComputationExt.update(TrackableComputationExt.java:103)
 	at org.eclipse.e4.core.internal.contexts.EclipseContext.removeListenersTo(EclipseContext.java:487)
 	at org.eclipse.e4.core.contexts.ContextInjectionFactory.uninject(ContextInjectionFactory.java:185)

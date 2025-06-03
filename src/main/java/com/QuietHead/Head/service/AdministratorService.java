@@ -23,11 +23,11 @@ public class AdministratorService {
         return administratorRepository.save(administrator);
     }
 
-    public List<Administrator> listarAdministrator() {
+    public List<Administrator> listAdministrator() {
         return administratorRepository.findAll();
     }
 
-    public Administrator buscarPorId(Long id) {
+    public Administrator seachById(Long id) {
         return administratorRepository.findById(id).orElse(null);
     }
 
@@ -47,7 +47,7 @@ public class AdministratorService {
         }
     }
 
-    public boolean deletePorEmail(String email) {
+    public boolean deleteByEmail(String email) {
         Optional<Administrator> administratorExisting = administratorRepository.findByEmail(email);
         if (administratorExisting.isPresent()) {
             administratorRepository.delete(administratorExisting.get());
@@ -56,13 +56,5 @@ public class AdministratorService {
             return false;
         }
     }
-      @PostConstruct
-    public void testarConexaoNeo4j() {
-        try {
-            List<Administrator> administrators = administratorRepository.findAll();
-            System.out.println("✅ Conexão com o Neo4j funcionando. Total de Clients: " + administrators.size());
-        } catch (Exception e) {
-            System.err.println("❌ Erro ao conectar com o Neo4j: " + e.getMessage());
-        }
-    }
+     
 }
