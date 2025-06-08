@@ -36,4 +36,8 @@ public class Message {
      @Relationship(type = "RECEIVED_BY", direction = Relationship.Direction.OUTGOING)
     private Client receiver;  
 
+     @Relationship(type = "BELONGS_TO", direction = Relationship.Direction.OUTGOING)
+    private Conversation conversation;
+
+
 }

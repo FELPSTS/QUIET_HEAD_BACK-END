@@ -12,60 +12,66 @@ import java.util.Optional;
 @Service
 public class ClientService {
 
-    private final ClientRepository ClientRepository;
+    private final ClientRepository clientRepository;
     private final ServiceQuiet serviceQuiet;
 
     @Autowired
-    public ClientService(ClientRepository ClientRepository, ServiceQuiet serviceQuiet) {
-        this.ClientRepository = ClientRepository;
+    public ClientService(ClientRepository clientRepository, ServiceQuiet serviceQuiet) {
+        this.clientRepository = clientRepository;
         this.serviceQuiet = serviceQuiet;
     }
 
-    public Client saveClient(Client Client) {
-        String saudacao = serviceQuiet.helloWorld(Client.getNome());
+    public Client saveClient(Client client) {
+        String saudacao = serviceQuiet.helloWorld(client.getNome());
         System.out.println(saudacao);
 
-        return ClientRepository.save(Client);
+        return clientRepository.save(client);
     }
 
     public List<Client> listarClients() {
-        return ClientRepository.findAll();
+        return clientRepository.findAll();
     }
 
     public Client buscarPorId(Long id) {
-        return ClientRepository.findById(id).orElse(null);
+        return clientRepository.findById(id).orElse(null);
     }
 
     public Client seachByEmail(String email) {
-        return ClientRepository.findByEmail(email).orElse(null);
+        return clientRepository.findByEmail(email).orElse(null);
     }
 
-    public Client updateByEmail(String email, Client ClientUpdate) {
-        Optional<Client> ClientExisting = ClientRepository.findByEmail(email);
-        if (ClientExisting .isPresent()) {
-            Client Client = ClientExisting.get();
-            Client.setNome(ClientUpdate.getNome());
-
-            return ClientRepository.save(Client);
+    public Client updateByEmail(String email, Client clientUpdate) {
+        Optional<Client> clientExisting = clientRepository.findByEmail(email);
+        if (clientExisting.isPresent()) {
+            Client client = clientExisting.get();
+            client.setNome(clientUpdate.getNome());
+            // Adicione outros campos que quiser atualizar aqui
+            return clientRepository.save(client);
         } else {
             return null;
         }
     }
 
     public boolean deletePorEmail(String email) {
-        Optional<Client> ClientExisting = ClientRepository.findByEmail(email);
-        if (ClientExisting.isPresent()) {
-            ClientRepository.delete(ClientExisting.get());
+        Optional<Client> clientExisting = clientRepository.findByEmail(email);
+        if (clientExisting.isPresent()) {
+            clientRepository.delete(clientExisting.get());
             return true;
         } else {
             return false;
         }
     }
-      @PostConstruct
+
+    public boolean validateLogin(String email, String password) {
+        Optional<Client> clientOpt = clientRepository.findByEmail(email);
+        return clientOpt.isPresent() && clientOpt.get().getPassword().equals(password);
+    }
+
+    @PostConstruct
     public void testarConexaoNeo4j() {
         try {
-            List<Client> Clients = ClientRepository.findAll();
-            System.out.println("✅ Conexão com o Neo4j funcionando. Total de Clients: " + Clients.size());
+            List<Client> clients = clientRepository.findAll();
+            System.out.println("✅ Conexão com o Neo4j funcionando. Total de Clients: " + clients.size());
         } catch (Exception e) {
             System.err.println("❌ Erro ao conectar com o Neo4j: " + e.getMessage());
         }
