@@ -1,5 +1,6 @@
 package com.QuietHead.Head.controller;
 
+import com.QuietHead.Head.dto.LoginRequest;
 import com.QuietHead.Head.domain.Administrator;
 import com.QuietHead.Head.service.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
