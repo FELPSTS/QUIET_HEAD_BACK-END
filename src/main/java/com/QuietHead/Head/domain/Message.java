@@ -9,10 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
-import org.springframework.data.neo4j.core.schema.TargetNode;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
