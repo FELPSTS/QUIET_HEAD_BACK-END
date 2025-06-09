@@ -56,5 +56,8 @@ public class AdministratorService {
             return false;
         }
     }
-     
+     public boolean validateLogin(String email, String password) {
+        Optional<Administrator> administratorOpt = administratorRepository.findByEmail(email);
+        return administratorOpt.isPresent() && administratorOpt.get().getPassword().equals(password);
+    }
 }
