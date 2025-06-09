@@ -2,7 +2,6 @@ package com.QuietHead.Head.service;
 
 import com.QuietHead.Head.domain.Administrator;
 import com.QuietHead.Head.repository.AdministratorRepository;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
