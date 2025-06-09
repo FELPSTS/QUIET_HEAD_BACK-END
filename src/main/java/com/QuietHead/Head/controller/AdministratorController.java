@@ -60,6 +60,14 @@ public class AdministratorController {
             return ResponseEntity.notFound().build(); 
         }
     }
-    
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+        boolean isValid = administratorService.validateLogin(loginRequest.getEmail(), loginRequest.getPassword());
 
+        if (isValid) {
+            return ResponseEntity.ok("Login realizado com sucesso!");
+        } else {
+            return ResponseEntity.status(401).body("Email ou senha inválidos");
+        }
+    }
 }
