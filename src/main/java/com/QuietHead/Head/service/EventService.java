@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.QuietHead.Head.domain.Event;
 import com.QuietHead.Head.repository.EventRepository;
-import jakarta.annotation.PostConstruct;
 
 import java.util.List;
 import java.util.Optional;
