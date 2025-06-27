@@ -62,7 +62,6 @@ public class AutoController {
         }
     }
 
-    // Relationship method
     @PutMapping("/{autoId}/owner/{ClientId}")
     public ResponseEntity<Auto> linkOwner(@PathVariable Long autoId, @PathVariable Long ClientId) {
         Auto updatedAuto = autoService.linkOwner(autoId, ClientId);
