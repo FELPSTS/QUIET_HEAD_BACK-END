@@ -20,11 +20,10 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    // Create a new message
     @PostMapping
     public ResponseEntity<Message> createMessage(@RequestBody Message message) {
         Message created = messageService.save(message);
-        return ResponseEntity.ok(created);
+        return ResponseEntity.status(201).body(created);
     }
 
     @GetMapping
@@ -35,47 +34,34 @@ public class MessageController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable Long id) {
-        Optional<Message> messageOpt = messageService.findById(id);
-        if (messageOpt.isPresent()) {
-            return ResponseEntity.ok(messageOpt.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return messageService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Update a message by ID
     @PutMapping("/{id}")
-    public ResponseEntity<Message> updateMessage(@PathVariable Long id, @RequestBody Message updatedMessage) {
-        Optional<Message> messageOpt = messageService.update(id, updatedMessage);
-        if (messageOpt.isPresent()) {
-            return ResponseEntity.ok(messageOpt.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Message> updateMessage(@PathVariable Long id,
+                                                 @RequestBody Message updatedMessage) {
+        return messageService.update(id, updatedMessage)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Delete a message by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMessage(@PathVariable Long id) {
         boolean deleted = messageService.delete(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return deleted ? ResponseEntity.noContent().build()
+                       : ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/send/{senderId}/to/{receiverId}")
+    @PostMapping("/send")
     public ResponseEntity<Message> sendMessage(
-            @PathVariable Long senderId,
-            @PathVariable Long receiverId,
+            @RequestParam Long senderId,
+            @RequestParam Long receiverId,
             @RequestBody Message message) {
 
         Optional<Message> sentMessage = messageService.sendMessage(senderId, receiverId, message);
-        if (sentMessage.isPresent()) {
-            return ResponseEntity.ok(sentMessage.get());
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        return sentMessage.map(m -> ResponseEntity.status(201).body(m))
+                          .orElse(ResponseEntity.badRequest().build());
     }
 }

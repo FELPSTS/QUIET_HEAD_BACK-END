@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Node
 public class Message {
 
@@ -24,7 +25,6 @@ public class Message {
     private Long id;
 
     private String text;
-
     private LocalDateTime dataHora = LocalDateTime.now();
     private boolean lida;
 

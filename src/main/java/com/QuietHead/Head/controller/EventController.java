@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-
-@RequestMapping("/event")
+@RequestMapping("/events")
 public class EventController {
 
     private final EventService eventService;
@@ -23,7 +23,7 @@ public class EventController {
     @PostMapping
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
         Event saved = eventService.saveEvent(event);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.status(201).body(saved);
     }
 
     @GetMapping
@@ -32,30 +32,25 @@ public class EventController {
         return ResponseEntity.ok(events);
     }
 
-    @PutMapping("/update/{email}")
-    public ResponseEntity<Event> updateEventById(@PathVariable Long id, @RequestBody Event eventUpdate) {
-        Event eventUpdateBanco = eventService.updateEventById(id, eventUpdate);
-        if (eventUpdateBanco != null) {
-            return ResponseEntity.ok(eventUpdateBanco);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<Event> getEventById(@PathVariable Long id) {
+        Optional<Event> event = Optional.ofNullable(eventService.getEventById(id));
+        return event.map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/delete/{id}")
-        public ResponseEntity<Void> deleteEventById(@PathVariable String id) {
-        try {
-            long eventId = Long.parseLong(id);
-            boolean deleted = eventService.deleteEventById(eventId);
-            if (deleted) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.notFound().build(); 
-            }
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().build();
-        }
-}
+    @PutMapping("/{id}")
+    public ResponseEntity<Event> updateEventById(@PathVariable Long id,
+                                                 @RequestBody Event eventUpdate) {
+        Optional<Event> updated = Optional.ofNullable(eventService.updateEventById(id, eventUpdate));
+        return updated.map(ResponseEntity::ok)
+                      .orElse(ResponseEntity.notFound().build());
+    }
 
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEventById(@PathVariable Long id) {
+        boolean deleted = eventService.deleteEventById(id);
+        return deleted ? ResponseEntity.noContent().build()
+                       : ResponseEntity.notFound().build();
+    }
 }

@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/administrator")
-
+@RequestMapping("/administrators")
 public class AdministratorController {
 
     private final AdministratorService administratorService;
@@ -28,47 +28,30 @@ public class AdministratorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Administrator>> listAdministrator() {
+    public ResponseEntity<List<Administrator>> getAllAdministrators() {
         List<Administrator> administrators = administratorService.listAdministrator();
         return ResponseEntity.ok(administrators);
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<Administrator> seachADMByEmail(@PathVariable String email) {
-        Administrator administrator = administratorService.seachByEmail(email);
-        if (administrator != null) {
-            return ResponseEntity.ok(administrator);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Administrator> getAdministratorByEmail(@PathVariable String email) {
+        Optional<Administrator> administrator = Optional.ofNullable(administratorService.seachByEmail(email));
+        return administrator.map(ResponseEntity::ok)
+                            .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/update/{email}")
-    public ResponseEntity<Administrator> updateADMFByEmail(@PathVariable String email, @RequestBody Administrator administratorUpdate) {
-        Administrator administratorUpdateBanco = administratorService.updateByEmail(email, administratorUpdate);
-        if (administratorUpdateBanco != null) {
-            return ResponseEntity.ok(administratorUpdateBanco);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @PutMapping("/{email}")
+    public ResponseEntity<Administrator> updateAdministratorByEmail(@PathVariable String email,
+                                                                     @RequestBody Administrator administratorUpdate) {
+        Optional<Administrator> updated = Optional.ofNullable(administratorService.updateByEmail(email, administratorUpdate));
+        return updated.map(ResponseEntity::ok)
+                      .orElse(ResponseEntity.notFound().build());
     }
-        @DeleteMapping("/delete/{email}")
-        public ResponseEntity<Void> deleteADMByEmail(@PathVariable String email) {
+
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> deleteAdministratorByEmail(@PathVariable String email) {
         boolean deleted = administratorService.deleteByEmail(email);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build(); 
-        }
-    }
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        boolean isValid = administratorService.validateLogin(loginRequest.getEmail(), loginRequest.getPassword());
-
-        if (isValid) {
-            return ResponseEntity.ok("Login realizado com sucesso!");
-        } else {
-            return ResponseEntity.status(401).body("Email ou senha inválidos");
-        }
+        return deleted ? ResponseEntity.noContent().build()
+                       : ResponseEntity.notFound().build();
     }
 }

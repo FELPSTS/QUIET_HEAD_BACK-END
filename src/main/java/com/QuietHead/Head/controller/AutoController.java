@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/autos")
 public class AutoController {
 
-    @Autowired
     private final AutoService autoService;
 
     @Autowired
@@ -27,47 +27,38 @@ public class AutoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Auto>> listarAutos() {
+    public ResponseEntity<List<Auto>> getAllAutos() {
         List<Auto> autos = autoService.listar();
         return ResponseEntity.ok(autos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Auto> buscarAutoPorId(@PathVariable Long id) {
-        Auto auto = autoService.buscarPorId(id);
-        if (auto != null) {
-            return ResponseEntity.ok(auto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Auto> getAutoById(@PathVariable Long id) {
+        Optional<Auto> auto = Optional.ofNullable(autoService.buscarPorId(id));
+        return auto.map(ResponseEntity::ok)
+                   .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Auto> atualizarAuto(@PathVariable Long id, @RequestBody Auto autoAtualizado) {
-        Auto atualizado = autoService.atualizar(id, autoAtualizado);
-        if (atualizado != null) {
-            return ResponseEntity.ok(atualizado);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @PutMapping("/{id}")
+    public ResponseEntity<Auto> updateAuto(@PathVariable Long id,
+                                           @RequestBody Auto autoAtualizado) {
+        Optional<Auto> atualizado = Optional.ofNullable(autoService.atualizar(id, autoAtualizado));
+        return atualizado.map(ResponseEntity::ok)
+                         .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deletarAuto(@PathVariable Long id) {
-        boolean deletado = autoService.deletar(id);
-        if (deletado) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAuto(@PathVariable Long id) {
+        boolean deleted = autoService.deletar(id);
+        return deleted ? ResponseEntity.noContent().build()
+                       : ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/{autoId}/owner/{ClientId}")
-    public ResponseEntity<Auto> linkOwner(@PathVariable Long autoId, @PathVariable Long ClientId) {
-        Auto updatedAuto = autoService.linkOwner(autoId, ClientId);
-        if (updatedAuto == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(updatedAuto);
+    @PutMapping("/{autoId}/owner/{clientId}")
+    public ResponseEntity<Auto> linkOwnerToAuto(@PathVariable Long autoId,
+                                                @PathVariable Long clientId) {
+        Optional<Auto> updated = Optional.ofNullable(autoService.linkOwner(autoId, clientId));
+        return updated.map(ResponseEntity::ok)
+                      .orElse(ResponseEntity.notFound().build());
     }
 }

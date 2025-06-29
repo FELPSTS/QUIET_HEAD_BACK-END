@@ -8,9 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/Clients")
+@RequestMapping("/clients")
 public class ClientController {
 
     private final ClientService clientService;
@@ -27,49 +28,30 @@ public class ClientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Client>> listarClients() {
+    public ResponseEntity<List<Client>> getAllClients() {
         List<Client> clients = clientService.listarClients();
         return ResponseEntity.ok(clients);
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<Client> searchClientByEmail(@PathVariable String email) {
-        Client client = clientService.seachByEmail(email);
-        if (client != null) {
-            return ResponseEntity.ok(client);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Client> getClientByEmail(@PathVariable String email) {
+        Optional<Client> client = Optional.ofNullable(clientService.seachByEmail(email));
+        return client.map(ResponseEntity::ok)
+                     .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/update/{email}")
-    public ResponseEntity<Client> updateClientPorEmail(@PathVariable String email, @RequestBody Client clientUpdate) {
-        Client updatedClient = clientService.updateByEmail(email, clientUpdate);
-        if (updatedClient != null) {
-            return ResponseEntity.ok(updatedClient);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @PutMapping("/{email}")
+    public ResponseEntity<Client> updateClientByEmail(@PathVariable String email,
+                                                      @RequestBody Client clientUpdate) {
+        Optional<Client> updatedClient = Optional.ofNullable(clientService.updateByEmail(email, clientUpdate));
+        return updatedClient.map(ResponseEntity::ok)
+                            .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/delete/{email}")
-    public ResponseEntity<Void> deleteClientPorEmail(@PathVariable String email) {
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> deleteClientByEmail(@PathVariable String email) {
         boolean deleted = clientService.deletePorEmail(email);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        boolean isValid = clientService.validateLogin(loginRequest.getEmail(), loginRequest.getPassword());
-
-        if (isValid) {
-            return ResponseEntity.ok("Login realizado com sucesso!");
-        } else {
-            return ResponseEntity.status(401).body("Email ou senha inválidos");
-        }
+        return deleted ? ResponseEntity.noContent().build()
+                       : ResponseEntity.notFound().build();
     }
 }

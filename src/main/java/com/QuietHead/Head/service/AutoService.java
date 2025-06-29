@@ -22,9 +22,6 @@ public class AutoService {
         this.ClientRepository = ClientRepository;  
     }
 
-
-
-
     public Auto save(Auto auto) {
         return autoRepository.save(auto);
     }
