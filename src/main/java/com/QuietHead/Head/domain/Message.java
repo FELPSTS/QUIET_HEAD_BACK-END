@@ -26,7 +26,7 @@ public class Message {
 
     private String text;
     private LocalDateTime dataHora = LocalDateTime.now();
-    private boolean lida;
+    private boolean Lida;
 
      @Relationship(type = "SENT_BY", direction = Relationship.Direction.OUTGOING)
     private Client sender;

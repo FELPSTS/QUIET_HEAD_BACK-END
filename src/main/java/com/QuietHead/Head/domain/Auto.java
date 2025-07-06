@@ -25,9 +25,9 @@ public class Auto {
     private Long id;
 
     private String modelo;
-    private String categoria;
+    private String category;
     private String cor;
-    private int ano;
+    private int year;
 
     @Relationship(type = "OWNER", direction = Relationship.Direction.INCOMING)
     private List<Client> owner;

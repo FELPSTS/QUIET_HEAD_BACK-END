@@ -21,7 +21,7 @@ public class Client {
     @GeneratedValue
     private Long id;
 
-    private String nome;
+    private String name;
     private String email;
     private String password;
 

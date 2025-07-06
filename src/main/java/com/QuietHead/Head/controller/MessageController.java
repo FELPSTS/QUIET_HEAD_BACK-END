@@ -40,8 +40,7 @@ public class MessageController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Message> updateMessage(@PathVariable Long id,
-                                                 @RequestBody Message updatedMessage) {
+    public ResponseEntity<Message> updateMessage(@PathVariable Long id,@RequestBody Message updatedMessage) {
         return messageService.update(id, updatedMessage)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

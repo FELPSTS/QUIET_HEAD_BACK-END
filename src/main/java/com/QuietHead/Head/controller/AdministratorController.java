@@ -35,17 +35,16 @@ public class AdministratorController {
 
     @GetMapping("/{email}")
     public ResponseEntity<Administrator> getAdministratorByEmail(@PathVariable String email) {
-        Optional<Administrator> administrator = Optional.ofNullable(administratorService.seachByEmail(email));
+        Optional<Administrator> administrator = Optional.ofNullable(administratorService.searchByEmail(email));
         return administrator.map(ResponseEntity::ok)
-                            .orElse(ResponseEntity.notFound().build());
+                        .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{email}")
-    public ResponseEntity<Administrator> updateAdministratorByEmail(@PathVariable String email,
-                                                                     @RequestBody Administrator administratorUpdate) {
+    public ResponseEntity<Administrator> updateAdministratorByEmail(@PathVariable String email, @RequestBody Administrator administratorUpdate) {
         Optional<Administrator> updated = Optional.ofNullable(administratorService.updateByEmail(email, administratorUpdate));
         return updated.map(ResponseEntity::ok)
-                      .orElse(ResponseEntity.notFound().build());
+                        .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{email}")

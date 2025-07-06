@@ -29,7 +29,7 @@ public class ClientController {
 
     @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
-        List<Client> clients = clientService.listarClients();
+        List<Client> clients = clientService.listClients();
         return ResponseEntity.ok(clients);
     }
 
@@ -41,8 +41,7 @@ public class ClientController {
     }
 
     @PutMapping("/{email}")
-    public ResponseEntity<Client> updateClientByEmail(@PathVariable String email,
-                                                      @RequestBody Client clientUpdate) {
+    public ResponseEntity<Client> updateClientByEmail(@PathVariable String email,@RequestBody Client clientUpdate) {
         Optional<Client> updatedClient = Optional.ofNullable(clientService.updateByEmail(email, clientUpdate));
         return updatedClient.map(ResponseEntity::ok)
                             .orElse(ResponseEntity.notFound().build());

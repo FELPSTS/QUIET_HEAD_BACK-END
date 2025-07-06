@@ -1,6 +1,7 @@
 package com.QuietHead.Head.service;
 
 import com.QuietHead.Head.domain.Administrator;
+import com.QuietHead.Head.exception.ResourceNotFoundException;
 import com.QuietHead.Head.repository.AdministratorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,19 +27,21 @@ public class AdministratorService {
         return administratorRepository.findAll();
     }
 
-    public Administrator seachById(Long id) {
-        return administratorRepository.findById(id).orElse(null);
+    public Administrator searchById(Long id) {
+        return administratorRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Administrador não encontrado com ID: " + id));
     }
 
-    public Administrator seachByEmail(String email) {
-        return administratorRepository.findByEmail(email).orElse(null);
+    public Administrator searchByEmail(String email) {
+        return administratorRepository.findByEmail(email)
+            .orElseThrow(() -> new ResourceNotFoundException("Administrador não encontrado com email: " + email));
     }
 
     public Administrator updateByEmail(String email, Administrator AdministratorUpdate) {
         Optional<Administrator> administratorExisting = administratorRepository.findByEmail(email);
         if (administratorExisting.isPresent()) {
             Administrator administrator = administratorExisting.get();
-            administrator.setNome(AdministratorUpdate.getNome());
+            administrator.setName(AdministratorUpdate.getName());
 
             return administratorRepository.save(administrator);
         } else {
@@ -55,8 +58,10 @@ public class AdministratorService {
             return false;
         }
     }
+    
      public boolean validateLogin(String email, String password) {
         Optional<Administrator> administratorOpt = administratorRepository.findByEmail(email);
         return administratorOpt.isPresent() && administratorOpt.get().getPassword().equals(password);
     }
+
 }

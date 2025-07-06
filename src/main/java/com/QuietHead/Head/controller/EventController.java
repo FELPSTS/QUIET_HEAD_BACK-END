@@ -40,8 +40,7 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEventById(@PathVariable Long id,
-                                                 @RequestBody Event eventUpdate) {
+    public ResponseEntity<Event> updateEventById(@PathVariable Long id,@RequestBody Event eventUpdate) {
         Optional<Event> updated = Optional.ofNullable(eventService.updateEventById(id, eventUpdate));
         return updated.map(ResponseEntity::ok)
                       .orElse(ResponseEntity.notFound().build());

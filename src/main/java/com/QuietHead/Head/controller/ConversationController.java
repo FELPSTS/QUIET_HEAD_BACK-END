@@ -44,7 +44,7 @@ public class ConversationController {
                    .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/messages")
+    @PutMapping("{conversation}/messages")
     public ResponseEntity<Void> attachMessages(
             @PathVariable Long conversationId,
             @RequestBody List<Long> messageIds) {

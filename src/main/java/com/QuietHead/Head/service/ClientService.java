@@ -22,13 +22,10 @@ public class ClientService {
     }
 
     public Client saveClient(Client client) {
-        String saudacao = serviceQuiet.helloWorld(client.getNome());
-        System.out.println(saudacao);
-
-        return clientRepository.save(client);
+         return clientRepository.save(client);
     }
 
-    public List<Client> listarClients() {
+    public List<Client> listClients() {
         return clientRepository.findAll();
     }
 
@@ -44,8 +41,7 @@ public class ClientService {
         Optional<Client> clientExisting = clientRepository.findByEmail(email);
         if (clientExisting.isPresent()) {
             Client client = clientExisting.get();
-            client.setNome(clientUpdate.getNome());
-            // Adicione outros campos que quiser atualizar aqui
+            client.setName(clientUpdate.getName());
             return clientRepository.save(client);
         } else {
             return null;

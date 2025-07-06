@@ -28,23 +28,22 @@ public class AutoController {
 
     @GetMapping
     public ResponseEntity<List<Auto>> getAllAutos() {
-        List<Auto> autos = autoService.listar();
+        List<Auto> autos = autoService.list();
         return ResponseEntity.ok(autos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Auto> getAutoById(@PathVariable Long id) {
-        Optional<Auto> auto = Optional.ofNullable(autoService.buscarPorId(id));
+        Optional<Auto> auto = Optional.ofNullable(autoService.seachById(id));
         return auto.map(ResponseEntity::ok)
                    .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Auto> updateAuto(@PathVariable Long id,
-                                           @RequestBody Auto autoAtualizado) {
-        Optional<Auto> atualizado = Optional.ofNullable(autoService.atualizar(id, autoAtualizado));
+    public ResponseEntity<Auto> updateAuto(@PathVariable Long id,@RequestBody Auto autoAtualizado) {
+        Optional<Auto> atualizado = Optional.ofNullable(autoService.update(id, autoAtualizado));
         return atualizado.map(ResponseEntity::ok)
-                         .orElse(ResponseEntity.notFound().build());
+                        .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
@@ -55,8 +54,7 @@ public class AutoController {
     }
 
     @PutMapping("/{autoId}/owner/{clientId}")
-    public ResponseEntity<Auto> linkOwnerToAuto(@PathVariable Long autoId,
-                                                @PathVariable Long clientId) {
+    public ResponseEntity<Auto> linkOwnerToAuto(@PathVariable Long autoId,@PathVariable Long clientId) {
         Optional<Auto> updated = Optional.ofNullable(autoService.linkOwner(autoId, clientId));
         return updated.map(ResponseEntity::ok)
                       .orElse(ResponseEntity.notFound().build());

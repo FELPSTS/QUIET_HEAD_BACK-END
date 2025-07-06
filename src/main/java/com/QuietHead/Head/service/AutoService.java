@@ -26,15 +26,15 @@ public class AutoService {
         return autoRepository.save(auto);
     }
 
-    public List<Auto> listar() {
+    public List<Auto> list() {
         return autoRepository.findAll();
     }
 
-    public Auto buscarPorId(Long id) {
+    public Auto seachById(Long id) {
         return autoRepository.findById(id).orElse(null);
     }
 
-    public Auto atualizar(Long id, Auto autoAtualizado) {
+    public Auto update(Long id, Auto autoAtualizado) {
         Auto existente = autoRepository.findById(id).orElse(null);
         if (existente != null) {
             autoAtualizado.setId(id); 
@@ -50,7 +50,7 @@ public class AutoService {
         }
         return false;
     }
-        // Relationship method
+
     public Auto linkOwner(Long autoId, Long ClientId) {
         Auto auto = autoRepository.findById(autoId).orElse(null);
         Client Client = ClientRepository.findById(ClientId).orElse(null);
