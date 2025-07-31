@@ -29,7 +29,7 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public Client buscarPorId(Long id) {
+    public Client buscarId(Long id) {
         return clientRepository.findById(id).orElse(null);
     }
 
@@ -48,7 +48,7 @@ public class ClientService {
         }
     }
 
-    public boolean deletePorEmail(String email) {
+    public boolean deletebyEmail(String email) {
         Optional<Client> clientExisting = clientRepository.findByEmail(email);
         if (clientExisting.isPresent()) {
             clientRepository.delete(clientExisting.get());
