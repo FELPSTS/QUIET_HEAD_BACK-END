@@ -1,6 +1,5 @@
 package com.QuietHead.Head.domain;
 
-import org.springframework.data.neo4j.core.schema.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -9,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -20,7 +18,7 @@ import java.util.UUID;
 public class Client {
 
     @Id
-    @GeneratedValue(GeneratedValue.UUIDGenerator.class)
+    @GeneratedValue
     private Long id;
 
     private String name;

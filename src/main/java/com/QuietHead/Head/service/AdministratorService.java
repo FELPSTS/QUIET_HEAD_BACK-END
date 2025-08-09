@@ -15,7 +15,7 @@ public class AdministratorService {
     private final AdministratorRepository administratorRepository;
 
     @Autowired
-    public AdministratorService(AdministratorRepository administratorRepository, ServiceQuiet serviceQuiet) {
+    public AdministratorService(AdministratorRepository administratorRepository) {
         this.administratorRepository = administratorRepository;
     }
 
