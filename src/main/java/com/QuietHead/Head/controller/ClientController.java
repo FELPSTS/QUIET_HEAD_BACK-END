@@ -3,28 +3,47 @@ package com.QuietHead.Head.controller;
 import com.QuietHead.Head.domain.Client;
 import com.QuietHead.Head.dto.LoginRequest;
 import com.QuietHead.Head.dto.LoginResponse;
+import com.QuietHead.Head.security.JwtUtil;
 import com.QuietHead.Head.service.ClientService;
+
+import jakarta.validation.Valid;
+
+import com.QuietHead.Head.exception.AuthenticationException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
 
     private final ClientService clientService;
+    private final JwtUtil jwtuntil;
 
     @Autowired
-    public ClientController(ClientService clientService) {
+    public ClientController(ClientService clientService, JwtUtil jwtuntil) {
         this.clientService = clientService;
+        this.jwtuntil = jwtuntil;
     }
 
     @PostMapping
     public ResponseEntity<Client> createClient(@RequestBody Client client) {
+        log.info("Requisição recebida - Email: {}", client.getEmail());
+
         Client createdClient = clientService.createClient(client);
-        return ResponseEntity.ok(createdClient);
+
+        log.info("Resposta enviada (HTTP 201) - Cliente criado: {}", createdClient);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdClient);
     }
 
     @GetMapping
@@ -63,18 +82,26 @@ public class ClientController {
                 : ResponseEntity.notFound().build();
     }
 
-        @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            LoginResponse response = clientService.authenticate(
-                loginRequest.getEmail(),
-                loginRequest.getPassword()
-            );
-            
-            return ResponseEntity.ok(response);
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(401)
-                .body(new LoginResponse(null, null, "Credenciais inválidas"));
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+    try {
+        Client client = clientService.authenticate(
+            loginRequest.email(),
+            loginRequest.password()
+        );
+        
+        String token = jwtuntil.generateToken(client.getEmail());
+        
+        return ResponseEntity.ok(new LoginResponse(
+            token,
+            client.getId(),
+            client.getEmail(),
+            client.getName()
+        ));
         }
+    catch (IllegalArgumentException e) {
+        log.error("Erro de autenticação: {}", e.getMessage());   
+        }
+    return null;
     }
 }

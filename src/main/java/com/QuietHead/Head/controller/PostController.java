@@ -54,9 +54,4 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}/like")
-    public ResponseEntity<Post> likePost(@PathVariable Long id) {
-        PostResponse response = postService.toggleLike(id);
-        return ResponseEntity.ok(response);
-    }
 }
