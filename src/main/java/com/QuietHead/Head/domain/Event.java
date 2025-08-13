@@ -25,13 +25,15 @@ public class Event {
     @GeneratedValue
     private Long id;
 
+    private String name;
+    private String description;
+    private String imageUrl;
     private String local;
     private LocalDate data;
 
     @Relationship(type = "CREATED_BY", direction = Relationship.Direction.OUTGOING)
-    private List<Administrator> administrador;
+    private Administrator administrador; 
 
     @Relationship(type = "PARTICIPANT", direction = Relationship.Direction.INCOMING)
     private List<Client> participantes;
-
 }
