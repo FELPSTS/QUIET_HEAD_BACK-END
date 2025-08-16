@@ -11,7 +11,7 @@ import jakarta.validation.Valid;
 import com.QuietHead.Head.exception.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-
+import java.security.Principal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -83,7 +83,7 @@ public class ClientController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
     try {
         Client client = clientService.authenticate(
             loginRequest.email(),
@@ -92,16 +92,18 @@ public class ClientController {
         
         String token = jwtuntil.generateToken(client.getEmail());
         
-        return ResponseEntity.ok(new LoginResponse(
+        LoginResponse response = new LoginResponse(
             token,
             client.getId(),
             client.getEmail(),
             client.getName()
-        ));
-        }
-    catch (IllegalArgumentException e) {
-        log.error("Erro de autenticação: {}", e.getMessage());   
-        }
-    return null;
+        );
+        
+        return ResponseEntity.ok(response);
+    } catch (AuthenticationException e) {
+        log.error("Erro de autenticação: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+}
+
 }
