@@ -3,59 +3,41 @@ package com.QuietHead.Head.service;
 import com.QuietHead.Head.domain.Administrator;
 import com.QuietHead.Head.domain.Client;
 import com.QuietHead.Head.domain.Event;
-import com.QuietHead.Head.dto.CreateEventDTO;
+import com.QuietHead.Head.dto.EventDetails;
 import com.QuietHead.Head.dto.EventDetails;
 import com.QuietHead.Head.exception.ResourceNotFoundException;
 import com.QuietHead.Head.repository.AdministratorRepository;
 import com.QuietHead.Head.repository.ClientRepository;
 import com.QuietHead.Head.repository.EventRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 
 import java.util.List;
-import java.util.Optional;
-
 
 @Service
+@RequiredArgsConstructor
 public class EventService {
 
     private final EventRepository eventRepository;
     private final ClientRepository clientRepository;
     private final AdministratorRepository administratorRepository;
 
-    @Autowired
-    public EventService(EventRepository eventRepository, 
-                       ClientRepository clientRepository,
-                       AdministratorRepository administratorRepository) {
-        this.eventRepository = eventRepository;
-        this.clientRepository = clientRepository;
-        this.administratorRepository = administratorRepository;
-    }
-
     @Transactional
-    public Event createEvent(CreateEventDTO eventDTO) {
-    Administrator admin = administratorRepository.findById(eventDTO.getAdministradorId())
-        .orElseThrow(() -> new ResourceNotFoundException("Administrador não encontrado"));
+    public Event createEvent(EventDetails details, Long administradorId) {
+        Administrator admin = administratorRepository.findById(administradorId)
+            .orElseThrow(() -> new ResourceNotFoundException("Administrador não encontrado com ID: " + administradorId));
 
-    Event event = new Event();
-    event.setName(eventDTO.getName());
-    event.setLocal(eventDTO.getLocal());
-    event.setData(eventDTO.getData());
-    event.setAdministrador(admin);
-    
-    return eventRepository.save(event);
-}
+        Event event = new Event();
+        event.setTitle(details.getTitle());
+        event.setDescription(details.getDescription());
+        event.setImageUrl(details.getImageUrl());
+        event.setLocal(details.getLocal());
+        event.setData(details.getData());
+        event.setAdministrador(admin);
+
+        return eventRepository.save(event);
+    }
 
     public List<Event> listEvents() {
         return eventRepository.findAll();
@@ -63,33 +45,38 @@ public class EventService {
 
     public Event getEventById(Long id) {
         return eventRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado"));
+            .orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado com ID: " + id));
     }
 
     @Transactional
     public Event updateEventById(Long id, EventDetails eventDetails) {
         Event existingEvent = getEventById(id);
-        
+
+        if (eventDetails.getTitle() != null) {
+            existingEvent.setTitle(eventDetails.getTitle());
+        }
+        if (eventDetails.getDescription() != null) {
+            existingEvent.setDescription(eventDetails.getDescription());
+        }
+        if (eventDetails.getImageUrl() != null) {
+            existingEvent.setImageUrl(eventDetails.getImageUrl());
+        }
         if (eventDetails.getLocal() != null) {
             existingEvent.setLocal(eventDetails.getLocal());
         }
         if (eventDetails.getData() != null) {
             existingEvent.setData(eventDetails.getData());
         }
-        if (eventDetails.getName() != null) {
-            existingEvent.setName(eventDetails.getName());
-        }
-        
+
         return eventRepository.save(existingEvent);
     }
 
     @Transactional
-    public boolean deleteEventById(Long id) {
-        if (eventRepository.existsById(id)) {
-            eventRepository.deleteById(id);
-            return true;
+    public void deleteEventById(Long id) {
+        if (!eventRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Evento não encontrado com ID: " + id);
         }
-        return false;
+        eventRepository.deleteById(id);
     }
 
     @Transactional
@@ -100,9 +87,8 @@ public class EventService {
 
         if (!event.getParticipantes().contains(participant)) {
             event.getParticipantes().add(participant);
-            return eventRepository.save(event);
         }
-        return event;
+        return eventRepository.save(event);
     }
 
     @Transactional
@@ -113,14 +99,5 @@ public class EventService {
 
         event.getParticipantes().remove(participant);
         return eventRepository.save(event);
-    }
-
-    @Transactional
-    public Event saveEvent(Event event) {
-        return eventRepository.save(event);
-    }
-
-    public Event createEvent(EventDetails details, Long administradorId) {
-        throw new UnsupportedOperationException("Unimplemented method 'createEvent'");
     }
 }

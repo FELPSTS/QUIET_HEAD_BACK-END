@@ -1,8 +1,13 @@
 package com.QuietHead.Head.service;
 
-import com.QuietHead.Head.domain.*;
-import com.QuietHead.Head.repository.*;
+import com.QuietHead.Head.domain.Client;
+import com.QuietHead.Head.domain.Comment;
+import com.QuietHead.Head.domain.Post;
+import com.QuietHead.Head.repository.ClientRepository;
+import com.QuietHead.Head.repository.CommentRepository;
+import com.QuietHead.Head.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -21,17 +27,25 @@ public class PostService {
 
     @Transactional
     public Post createPost(Post post) {
+        log.info("Creating new post for author email: {}", 
+                post.getAuthor() != null ? post.getAuthor().getEmail() : "null");
+        
         if (post == null || post.getAuthor() == null) {
+            log.error("Post or author cannot be null");
             throw new IllegalArgumentException("Post and author must not be null");
         }
 
         String email = post.getAuthor().getEmail();
         if (email == null || email.isBlank()) {
+            log.error("Author email must be provided");
             throw new IllegalArgumentException("Author email must be provided");
         }
 
         Client author = clientRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Author not found with email: " + email));
+                .orElseThrow(() -> {
+                    log.error("Author not found with email: {}", email);
+                    return new IllegalArgumentException("Author not found with email: " + email);
+                });
 
         validatePostContent(post.getContent());
 
@@ -41,63 +55,104 @@ public class PostService {
         post.setUpdatedAt(now);
         post.setLikeCount(0);
 
-        return postRepository.save(post);
+        Post savedPost = postRepository.save(post);
+        log.info("Post created successfully with ID: {}", savedPost.getId());
+        return savedPost;
     }
 
     private void validatePostContent(String content) {
         if (content == null || content.isBlank()) {
+            log.error("Post content cannot be empty");
             throw new IllegalArgumentException("Post content must not be empty");
         }
     }
 
     public Optional<Post> getPostById(Long id) {
-        return postRepository.findById(id);
+        log.debug("Fetching post by ID: {}", id);
+        Optional<Post> post = postRepository.findById(id);
+        if (post.isPresent()) {
+            log.debug("Post found with ID: {}", id);
+        } else {
+            log.debug("Post not found with ID: {}", id);
+        }
+        return post;
     }
 
     public List<Post> getAllPosts() {
-        return postRepository.findAll();
+        log.debug("Fetching all posts");
+        List<Post> posts = postRepository.findAll();
+        log.debug("Found {} posts", posts.size());
+        return posts;
     }
 
     @Transactional
     public Post updatePost(Long id, Post postUpdates) {
+        log.info("Updating post with ID: {}", id);
+        
         Post existingPost = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + id));
+                .orElseThrow(() -> {
+                    log.error("Post not found for update with ID: {}", id);
+                    return new IllegalArgumentException("Post not found with id: " + id);
+                });
 
         if (postUpdates.getContent() != null) {
             validatePostContent(postUpdates.getContent());
             existingPost.setContent(postUpdates.getContent());
             existingPost.setUpdatedAt(LocalDateTime.now());
+            log.info("Post content updated for ID: {}", id);
         }
 
-        return postRepository.save(existingPost);
+        Post updatedPost = postRepository.save(existingPost);
+        log.info("Post updated successfully with ID: {}", id);
+        return updatedPost;
     }
 
     @Transactional
     public void deletePost(Long id) {
+        log.info("Deleting post with ID: {}", id);
+        
         if (!postRepository.existsById(id)) {
+            log.error("Post not found for deletion with ID: {}", id);
             throw new IllegalArgumentException("Post not found with id: " + id);
         }
+        
         postRepository.deleteById(id);
+        log.info("Post deleted successfully with ID: {}", id);
     }
 
     @Transactional
     public Comment addComment(Long postId, Comment comment) {
+        log.info("Adding comment to post ID: {}", postId);
+        
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + postId));
+                .orElseThrow(() -> {
+                    log.error("Post not found for comment with ID: {}", postId);
+                    return new IllegalArgumentException("Post not found with id: " + postId);
+                });
 
         if (comment.getAuthor() == null || comment.getContent() == null || comment.getContent().isBlank()) {
+            log.error("Comment must have author and non-empty content");
             throw new IllegalArgumentException("Comment must have an author and non-empty content");
         }
 
         comment.setPost(post);
         comment.setCreatedAt(LocalDateTime.now());
-        return commentRepository.save(comment);
+        
+        Comment savedComment = commentRepository.save(comment);
+        log.info("Comment added successfully with ID: {} to post ID: {}", savedComment.getId(), postId);
+        return savedComment;
     }
 
     public List<Comment> getCommentsForPost(Long postId) {
+        log.debug("Fetching comments for post ID: {}", postId);
+        
         if (!postRepository.existsById(postId)) {
+            log.error("Post not found for comments with ID: {}", postId);
             throw new IllegalArgumentException("Post not found with id: " + postId);
         }
-        return commentRepository.findByPostId(postId);
+        
+        List<Comment> comments = commentRepository.findByPostId(postId);
+        log.debug("Found {} comments for post ID: {}", comments.size(), postId);
+        return comments;
     }
 }

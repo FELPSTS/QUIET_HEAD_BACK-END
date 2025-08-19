@@ -1,4 +1,4 @@
-package com.QuietHead.Head.configuration;  // ← Declaração de pacote obrigatória!
+package com.QuietHead.Head.configuration; 
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

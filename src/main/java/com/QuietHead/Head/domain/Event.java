@@ -25,7 +25,7 @@ public class Event {
     @GeneratedValue
     private Long id;
 
-    private String name;
+    private String title;
     private String description;
     private String imageUrl;
     private String local;
