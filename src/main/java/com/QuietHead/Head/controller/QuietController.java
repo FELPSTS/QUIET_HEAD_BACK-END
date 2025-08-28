@@ -17,7 +17,7 @@ public class QuietController {
     private final ServiceQuiet helloWorldService;
     private final ClientRepository ClientRepository;
 
-@Autowired
+    
     public QuietController(ServiceQuiet helloWorldService, ClientRepository ClientRepository) {
         this.helloWorldService = helloWorldService;
         this.ClientRepository = ClientRepository;

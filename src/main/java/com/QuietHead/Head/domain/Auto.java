@@ -1,23 +1,22 @@
 package com.QuietHead.Head.domain;
 
+import org.springframework.data.annotation.*;
+
 import org.springframework.data.annotation.Id;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
+import jakarta.validation.constraints.NotEmpty;
+import com.QuietHead.Head.domain.Client;
+import com.QuietHead.Head.domain.Event;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
+import org.springframework.data.neo4j.core.schema.*;
 import java.util.List;
 
+@Node
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-
-@Node
+@AllArgsConstructor
+@Builder
 public class Auto {
 
     @Id
@@ -27,11 +26,11 @@ public class Auto {
     private String modelo;
     private String category;
     private String cor;
-    private int year;
+    private Integer year;
 
-    @Relationship(type = "OWNER", direction = Relationship.Direction.INCOMING)
-    private List<Client> owner;
+    @Relationship(type = "OWNED_BY", direction = Relationship.Direction.OUTGOING)
+    private Client owner;
 
-    @Relationship(type = "PARTICIPANT", direction = Relationship.Direction.INCOMING)
-    private List<Auto> PARTICIPANT;
+    @Relationship(type = "PARTICIPATES_IN", direction = Relationship.Direction.OUTGOING)
+    private List<Event> events;
 }

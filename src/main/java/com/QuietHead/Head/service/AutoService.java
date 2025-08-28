@@ -88,7 +88,7 @@ public class AutoService {
             return null; 
         }
 
-        auto.setOwner(List.of(client));
+        auto.setOwner((Client) List.of(client));
         Auto updatedAuto = autoRepository.save(auto);
         log.info("Owner {} linked successfully to auto {}", clientId, autoId);
         return updatedAuto;

@@ -15,9 +15,10 @@ import java.time.LocalDateTime;
 @Builder
 
 public class Comment {
-
+ 
+    @Id
     @GeneratedValue
-    @Id    
+    
     private Long id;
 
     @Property
@@ -37,13 +38,5 @@ public class Comment {
 
     @Relationship(type = "COMMENTED_ON", direction = Relationship.Direction.OUTGOING)
     private Post post;
-
-    // Métodos auxiliares
-    public void associateWithAuthor(Client author) {
-        this.author = author;
-    }
-
-    public void associateWithPost(Post post) {
-        this.post = post;
-    }
+    
 }
