@@ -7,7 +7,9 @@ import org.springframework.data.neo4j.core.schema.*;
 import jakarta.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Node
 @Getter
@@ -17,7 +19,6 @@ import java.util.List;
 @Builder
 public class Post {
 
-    
     @GeneratedValue
     @Id
     private Long id;
@@ -37,6 +38,11 @@ public class Post {
     @Builder.Default
     private Integer likeCount = 0;
 
+    // Propriedade para armazenar quem curtiu
+    @Property("liked_by")
+    @Builder.Default
+    private Set<String> likedBy = new HashSet<>();
+
     @CreatedDate
     @Property("created_at")
     private LocalDateTime createdAt;
@@ -52,13 +58,7 @@ public class Post {
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
-    public void addComment(Comment comment) {
-        if (comments == null) {
-            comments = new ArrayList<>();
-        }
-        this.comments.add(comment);
-    }
-
+    // Métodos para manipulação de likes
     public void incrementLikes() {
         if (likeCount == null) {
             likeCount = 0;
@@ -71,5 +71,22 @@ public class Post {
             likeCount = 0;
         }
         this.likeCount = Math.max(0, this.likeCount - 1);
+    }
+
+    public void addLikedBy(String userId) {
+        if (likedBy == null) {
+            likedBy = new HashSet<>();
+        }
+        likedBy.add(userId);
+    }
+
+    public void removeLikedBy(String userId) {
+        if (likedBy != null) {
+            likedBy.remove(userId);
+        }
+    }
+
+    public boolean isLikedBy(String userId) {
+        return likedBy != null && likedBy.contains(userId);
     }
 }

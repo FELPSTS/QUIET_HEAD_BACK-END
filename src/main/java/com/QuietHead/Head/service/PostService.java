@@ -12,8 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -154,5 +157,58 @@ public class PostService {
         List<Comment> comments = commentRepository.findByPostId(postId);
         log.debug("Found {} comments for post ID: {}", comments.size(), postId);
         return comments;
+    }
+
+        @Transactional
+    public void likePost(Long postId, String userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow();
+        
+        if (post.getLikedBy() == null) {
+            post.setLikedBy(new HashSet<>());
+        }
+        
+        // CORRETO: Verifica se o usuário já curtiu
+        if (!post.getLikedBy().contains(userId)) {
+            post.incrementLikes();
+            post.getLikedBy().add(userId); // CORRETO: Add String ao Set<String>
+            postRepository.save(post);
+            log.info("User {} liked post ID: {}", userId, postId);
+        }
+    }
+
+    @Transactional
+    public void unlikePost(Long postId, String userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow();
+        
+        // CORRETO: Verifica e remove
+        if (post.getLikedBy() != null && post.getLikedBy().contains(userId)) {
+            post.decrementLikes();
+            post.getLikedBy().remove(userId); // CORRETO: Remove String do Set<String>
+            postRepository.save(post);
+            log.info("User {} unliked post ID: {}", userId, postId);
+        }
+    }
+
+    public boolean hasUserLikedPost(Long postId, String userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow();
+        
+        return post.getLikedBy() != null && post.getLikedBy().contains(userId);
+    }
+
+    public int getLikeCount(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow();
+        
+        return post.getLikeCount() != null ? post.getLikeCount() : 0;
+    }
+
+    public Set<String> getLikedBy(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow();
+
+        return post.getLikedBy() != null ? post.getLikedBy() : new HashSet<>();
     }
 }
